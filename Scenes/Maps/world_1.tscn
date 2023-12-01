@@ -1,9 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://b37b1coq5yjgg"]
 
-[ext_resource type="PackedScene" uid="uid://baxusm4sevrvd" path="res://skate_player.tscn" id="1_n47gg"]
+[ext_resource type="PackedScene" uid="uid://baxusm4sevrvd" path="res://Scenes/Characters/skate_player.tscn" id="1_0nkvd"]
 
-[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_n16hb"]
-albedo_color = Color(0.4, 0.447059, 0.8, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qu01a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_iewpq"]
 sky_top_color = Color(0.662745, 0.14902, 0.796078, 1)
@@ -28,13 +27,13 @@ sky = SubResource("Sky_7cgaa")
 transform = Transform3D(2.26397, 0, 0, 0, 0.577052, 0, 0, 0, 2.34225, -0.538375, -1.18685, 0)
 use_collision = true
 size = Vector3(18.6285, 1, 11.7016)
-material = SubResource("ORMMaterial3D_n16hb")
+material = SubResource("ShaderMaterial_qu01a")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.59646, 0)
 omni_range = 28.5279
 
-[node name="skate_player" parent="." instance=ExtResource("1_n47gg")]
+[node name="skate_player" parent="." instance=ExtResource("1_0nkvd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.381284, 0)
 
 [node name="vaporsky1" type="WorldEnvironment" parent="."]

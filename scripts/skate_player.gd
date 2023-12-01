@@ -1,13 +1,16 @@
 extends CharacterBody3D
 
-
 const acceleration = 2
 const jump_velocity = 4.5
 var rot_x = 0
 var rot_y = 0
-@export var sens = 0.005
+var forward:
+	get:
+		return -camera.transform.z
+@export var sens = 0.001:
+	set(new_value):
+		sens = new_value
 @onready var camera = $camera_comp
-# Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func _ready():
@@ -15,11 +18,10 @@ func _ready():
 
 
 func _physics_process(delta):
-	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
-	# Handle Jump.
+	
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = jump_velocity
 
