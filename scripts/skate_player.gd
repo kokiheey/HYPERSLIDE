@@ -27,7 +27,7 @@ func _physics_process(delta):
 
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
-	var direction = (camera.transform.basis.z * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var direction = (camera.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction: #null check?
 		velocity.x += direction.x * acceleration * delta
 		velocity.z += direction.z * acceleration * delta

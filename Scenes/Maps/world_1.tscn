@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://b37b1coq5yjgg"]
+[gd_scene load_steps=7 format=3 uid="uid://b37b1coq5yjgg"]
 
 [ext_resource type="PackedScene" uid="uid://baxusm4sevrvd" path="res://Scenes/Characters/skate_player.tscn" id="1_0nkvd"]
+[ext_resource type="Texture2D" uid="uid://dmtwolafd3wmg" path="res://Resources/gridbox materials/prototype_512x512_blue1.png" id="1_t17fr"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qu01a"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m4rmv"]
+albedo_texture = ExtResource("1_t17fr")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_iewpq"]
 sky_top_color = Color(0.662745, 0.14902, 0.796078, 1)
@@ -26,8 +28,8 @@ sky = SubResource("Sky_7cgaa")
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(2.26397, 0, 0, 0, 0.577052, 0, 0, 0, 2.34225, -0.538375, -1.18685, 0)
 use_collision = true
-size = Vector3(18.6285, 1, 11.7016)
-material = SubResource("ShaderMaterial_qu01a")
+size = Vector3(18.6285, 1, 17.2412)
+material = SubResource("StandardMaterial3D_m4rmv")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.59646, 0)
