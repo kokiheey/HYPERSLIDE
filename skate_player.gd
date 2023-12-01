@@ -25,21 +25,17 @@ func _physics_process(delta):
 
 	
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
-	var direction = (camera.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var direction = (camera.transform.basis.z * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction: #null check?
 		velocity.x += direction.x * acceleration * delta
 		velocity.z += direction.z * acceleration * delta
-	#else: #izgleda kao da ovo gasi kretanje kad prestanes da drzis movement
-	#	velocity.x = move_toward(velocity.x, 0, acceleration)
-	#	velocity.z = move_toward(velocity.z, 0, acceleration)
-
 	move_and_slide() #send movement to charcterbody class ?
 	
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
-		rot_x = -event.relative.x * sens
-		rot_y = -event.relative.y * sens
+		rot_x += -event.relative.x * sens
+		rot_y += -event.relative.y * sens
 		rot_y = clampf(rot_y, -1.5, 1.5)
-		camera.rotate_x(rot_y)
-		camera.rotate_y(rot_x)
-	
+		camera.transform.basis = Basis()
+		camera.rotate_object_local(Vector3(0, 1, 0), rot_x)
+		camera.rotate_object_local(Vector3(1, 0, 0), rot_y)
