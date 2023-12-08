@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://b37b1coq5yjgg"]
 
-[ext_resource type="Texture2D" uid="uid://dmtwolafd3wmg" path="res://Resources/Textures/Gridbox_materials/prototype_512x512_blue1.png" id="1_cgh8n"]
-[ext_resource type="PackedScene" uid="uid://baxusm4sevrvd" path="res://Assets/characters/ink/skate_player.tscn" id="2_w5hti"]
+[ext_resource type="Texture2D" uid="uid://dmtwolafd3wmg" path="res://Resources/Textures/Gridbox_materials/prototype_512x512_blue1.png" id="1_aipls"]
+[ext_resource type="PackedScene" uid="uid://baxusm4sevrvd" path="res://Assets/game/entities/characters/ink/ink.tscn" id="2_p2xm6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m4rmv"]
-albedo_texture = ExtResource("1_cgh8n")
+albedo_texture = ExtResource("1_aipls")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_iewpq"]
 sky_top_color = Color(0.662745, 0.14902, 0.796078, 1)
@@ -35,8 +35,7 @@ material = SubResource("StandardMaterial3D_m4rmv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.59646, 0)
 omni_range = 28.5279
 
-[node name="skate_player" parent="." instance=ExtResource("2_w5hti")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.381284, 0)
-
 [node name="vaporsky1" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1l6cl")
+
+[node name="ink" parent="." instance=ExtResource("2_p2xm6")]

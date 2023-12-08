@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 const acceleration = 2
 const jump_velocity = 4.5
+const brake_strength = 0.05
 var rot_x = 0
 var rot_y = 0
 var forward:
@@ -24,13 +25,14 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = jump_velocity
-
-	
-	var input_dir = Input.get_vector("left", "right", "forward", "backward")
+	if Input.is_action_pressed("mouse_right") and is_on_floor():
+		velocity.x = lerp(velocity.x, 0.0, brake_strength)
+		velocity.y = lerp(velocity.y, 0.0, brake_strength)
+		velocity.z = lerp(velocity.z, 0.0, brake_strength)
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (camera.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction: #null check?
-		velocity.x += direction.x * acceleration * delta
-		velocity.z += direction.z * acceleration * delta
+	velocity.x += direction.x * acceleration * delta
+	velocity.z += direction.z * acceleration * delta
 	move_and_slide() #send movement to charcterbody class ?
 	
 func _unhandled_input(event):
