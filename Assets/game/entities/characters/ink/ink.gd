@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 const acceleration = 3
+const move_speed = 20
 const jump_velocity = 4.5
 const brake_strength = 1
 const _drag = 0.5
@@ -31,15 +32,15 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (camera.transform.basis * transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if is_on_floor():
-		velocity.x += direction.x * acceleration * delta
-		velocity.z += direction.z * acceleration * delta
-		velocity.x = lerp(velocity.x, (velocity.x if input_dir.x != 0 else 0.0), \
-		brake_strength * delta)
-		velocity.z = lerp(velocity.z, (velocity.z if input_dir.y != 0 else 0.0), \
-		brake_strength * delta)
-		if velocity.length_squared() < 0.125 and input_dir == Vector2(0, 0):
-			velocity = Vector3.ZERO
-	
+		if velocity.length_squared() < 20:
+			velocity = direction * acceleration * delta
+		else:
+			velocity.x += direction.x * acceleration * delta
+			velocity.z += direction.z * acceleration * delta
+			velocity.x = lerp(velocity.x, (velocity.x if input_dir.x != 0 else 0.0), \
+			brake_strength * delta)
+			velocity.z = lerp(velocity.z, (velocity.z if input_dir.y != 0 else 0.0), \
+			brake_strength * delta)
 	move_and_slide()
 	
 func _unhandled_input(event):
