@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmnxmxkte4i0h"]
+
+[ext_resource type="Script" path="res://Assets/!debug/player_info.gd" id="1_wn8jn"]
+
+[node name="player_info" type="CanvasLayer"]
+script = ExtResource("1_wn8jn")
+
+[node name="velocity_text" type="Label" parent="."]
+offset_right = 172.0
+offset_bottom = 96.0
