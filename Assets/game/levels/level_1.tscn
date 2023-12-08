@@ -22,7 +22,7 @@ sky_material = SubResource("ProceduralSkyMaterial_iewpq")
 
 [sub_resource type="Environment" id="Environment_1l6cl"]
 background_mode = 2
-background_energy_multiplier = 0.13
+background_energy_multiplier = 1.15
 sky = SubResource("Sky_7cgaa")
 
 [node name="level_1" type="Node3D"]
@@ -42,5 +42,6 @@ omni_range = 28.5279
 environment = SubResource("Environment_1l6cl")
 
 [node name="ink" parent="." instance=ExtResource("2_p2xm6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.101924, 0)
 
 [node name="player_info" parent="." instance=ExtResource("4_sapyx")]

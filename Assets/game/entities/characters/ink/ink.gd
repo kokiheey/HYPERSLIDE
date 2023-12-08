@@ -2,9 +2,8 @@ extends CharacterBody3D
 
 const acceleration = 3
 const jump_velocity = 4.5
-const brake_strength = 1	
-var rot_x = 0
-var rot_y = 0
+const brake_strength = 1
+const _drag = 0.5
 var forward:
 	get:
 		return -camera.transform.z
@@ -30,25 +29,22 @@ func _physics_process(delta):
 	
 	
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	var direction = (camera.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	velocity.x += direction.x * acceleration * delta
-	velocity.z += direction.z * acceleration * delta
-	#if input_dir.x != 0:
-	#	velocity.z = lerp(velocity.z, 0.0, 0.9)
-	#	print_debug("ow")
+	var direction = (camera.transform.basis * transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	if is_on_floor():
+		velocity.x += direction.x * acceleration * delta
+		velocity.z += direction.z * acceleration * delta
+		velocity.x = lerp(velocity.x, (velocity.x if input_dir.x != 0 else 0.0), \
+		brake_strength * delta)
+		velocity.z = lerp(velocity.z, (velocity.z if input_dir.y != 0 else 0.0), \
+		brake_strength * delta)
+		if velocity.length_squared() < 0.125 and input_dir == Vector2(0, 0):
+			velocity = Vector3.ZERO
 	
-	velocity.x = lerp(velocity.x, (velocity.x if input_dir.x != 0 else 0.0), brake_strength * delta)
-	velocity.z = lerp(velocity.z, (velocity.z if input_dir.y != 0 else 0.0), brake_strength * delta)
-	if velocity.length_squared() < 0.125 and input_dir == Vector2(0, 0):
-		velocity = Vector3.ZERO
-	
-	move_and_slide() #send movement to charcterbody class ?
+	move_and_slide()
 	
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
-		rot_x += -event.relative.x * sens
-		rot_y += -event.relative.y * sens
-		rot_y = clampf(rot_y, -1.5, 1.5)
-		camera.transform.basis = Basis()
-		camera.rotate_object_local(Vector3(0, 1, 0), rot_x)
-		camera.rotate_object_local(Vector3(1, 0, 0), rot_y)
+		var roty = -event.relative.y * sens
+		if camera.rotation.x + roty < PI/2 and camera.rotation.x > -PI/2:
+			camera.rotate_x(-event.relative.y * sens)
+		rotate_y(-event.relative.x * sens)
