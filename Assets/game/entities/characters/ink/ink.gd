@@ -1,10 +1,13 @@
 extends CharacterBody3D
 
-const acceleration = 3
+#region test
+const acceleration = 5
 const move_speed = 20
-const jump_velocity = 4.5
+const jump_velocity = 7
 const brake_strength = 1
-const _drag = 0.5
+const drag = 3
+#endregion
+
 var forward:
 	get:
 		return -camera.transform.z
@@ -23,7 +26,7 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 
 	
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("move_jump") and is_on_floor():
 		velocity.y = jump_velocity
 	if Input.is_action_pressed("mouse_right") and is_on_floor():
 		velocity.lerp(Vector3(0, 0, 0), velocity.length_squared())
@@ -32,15 +35,12 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (camera.transform.basis * transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if is_on_floor():
-		if velocity.length_squared() < 20:
-			velocity = direction * acceleration * delta
-		else:
-			velocity.x += direction.x * acceleration * delta
-			velocity.z += direction.z * acceleration * delta
-			velocity.x = lerp(velocity.x, (velocity.x if input_dir.x != 0 else 0.0), \
-			brake_strength * delta)
-			velocity.z = lerp(velocity.z, (velocity.z if input_dir.y != 0 else 0.0), \
-			brake_strength * delta)
+		velocity += direction * acceleration * delta
+		velocity.x = lerp(velocity.x, (velocity.x if input_dir.x != 0 and input_dir else 0.0), \
+		brake_strength * delta)
+		velocity.z = lerp(velocity.z, (velocity.z if input_dir.y != 0 and input_dir else 0.0), \
+		brake_strength * delta)
+		velocity.lerp(Vector3(0, velocity.y, 0), clamp(drag * velocity.length_squared(), 0, 100) / 100.0)
 	move_and_slide()
 	
 func _unhandled_input(event):
