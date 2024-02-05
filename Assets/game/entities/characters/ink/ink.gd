@@ -1,12 +1,12 @@
 extends CharacterBody3D
 
-#region test
+#physics constants
 const acceleration = 5
 const move_speed = 20
 const jump_velocity = 7
 const brake_strength = 1
 const drag = 3
-#endregion
+var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var forward:
 	get:
@@ -15,7 +15,10 @@ var forward:
 	set(new_value):
 		sens = new_value
 @onready var camera = $camera_comp
-var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+
+var stopping_force = 0
+var stopping_strength = 0.1
+var initial_velocity = Vector3(0, 0, 0)
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -28,12 +31,22 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("move_jump") and is_on_floor():
 		velocity.y = jump_velocity
-	if Input.is_action_pressed("mouse_right") and is_on_floor():
-		velocity.lerp(Vector3(0, 0, 0), velocity.length_squared())
+		
+	#hockey stop like mechanic with stop force 
+	if Input.is_action_pressed("hockey_stop") and is_on_floor():
+		if initial_velocity == Vector3.ZERO:
+			initial_velocity = velocity
+		velocity = initial_velocity.lerp(Vector3.ZERO, stopping_force)
+		stopping_force += stopping_strength
+		stopping_force = minf(1.0, stopping_force)
+	else:
+		stopping_force /= 1.2
+		initial_velocity = Vector3.ZERO
 	
 	
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (camera.transform.basis * transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	#slowing and friction. clamp vertical velocity too
 	if is_on_floor():
 		velocity += direction * acceleration * delta
 		velocity.x = lerp(velocity.x, (velocity.x if input_dir.x != 0 and input_dir else 0.0), \
